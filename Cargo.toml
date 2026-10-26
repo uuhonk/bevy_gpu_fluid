@@ -1,0 +1,38 @@
+[package]
+name = "bevy_gpu_fluid"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97.1"
+description = "GPU SPH fluid simulation for Bevy 0.20"
+repository = "https://github.com/uuhonk/bevy_gpu_fluid"
+license = "MIT OR Apache-2.0"
+keywords = ["bevy", "fluid", "gpu", "sph", "3d"]
+categories = ["game-development", "simulation", "rendering"]
+exclude = ["**/.DS_Store", ".cargo/"]
+
+[features]
+# Explicit development opt-in; never enabled by default.
+dev = ["bevy/dynamic_linking"]
+
+[dependencies]
+bevy = { version = "0.20", default-features = false, features = [
+    "std", "async_executor", "multi_threaded", "bevy_asset", "bevy_log", "bevy_render",
+    "bevy_core_pipeline", "bevy_sprite", "bevy_sprite_render",
+] }
+bytemuck = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+bevy = { version = "0.20", default-features = false, features = [
+    "std", "async_executor", "multi_threaded", "bevy_asset", "bevy_log",
+    "bevy_winit", "x11", "wayland", "png", "bevy_pbr", "tonemapping_luts", "zstd_rust",
+] }
+naga = { version = "30", features = ["wgsl-in"] }
+wgpu = { version = "30", default-features = false, features = ["std", "metal", "vulkan", "wgsl"] }
+
+[profile.dev]
+opt-level = 1
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+opt-level = 3
+debug = 0
